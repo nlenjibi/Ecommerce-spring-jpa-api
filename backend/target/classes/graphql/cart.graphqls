@@ -1,0 +1,46 @@
+enum CartStatus {
+    ACTIVE
+    ABANDONED
+    CONVERTED
+}
+
+type Cart {
+    id: ID!
+    status: CartStatus!
+    items: [CartItem!]!
+    totalPrice: BigDecimal!
+    finalPrice: BigDecimal!
+    itemCount: Int!
+    dateCreated: DateTime!
+    updatedAt: DateTime!
+}
+
+type CartItem {
+    id: ID!
+    product: ProductResponse!
+    quantity: Int!
+    unitPrice: BigDecimal!
+    totalPrice: BigDecimal!
+}
+
+input AddItemToCartInput {
+    productId: ID!
+    quantity: Int!
+}
+
+input UpdateCartItemInput {
+    quantity: Int!
+}
+
+extend type Query {
+    cart(id: ID!): Cart
+}
+
+extend type Mutation {
+    createCart: Cart!
+    addItemToCart(cartId: ID!, input: AddItemToCartInput!): CartItem!
+    updateCartItem(cartId: ID!, productId: ID!, input: UpdateCartItemInput!): CartItem!
+    removeCartItem(cartId: ID!, productId: ID!): Boolean!
+    clearCart(cartId: ID!): Boolean!
+    mergeCart(guestCartId: ID!): Cart!
+}
