@@ -1,7 +1,7 @@
 enum Role {
+    USER
     ADMIN
-    CUSTOMER
-    MERCHANT
+    SELLER
 }
 
 type User {

@@ -38,19 +38,17 @@ spring:
       path: /graphiql
     path: /graphql
     schema:
-      locations: classpath:graphql/**/*.graphqls
+      locations: classpath:graphql/
       file-extensions: .graphqls
       printer:
-        enabled: true  # Enable schema introspection
+        enabled: true
     cors:
       allowed-origins: 
         - "http://localhost:3000"
         - "https://localhost:3000"
-        - "http://localhost:9190"
       allowed-methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
       allowed-headers: ["*"]
       allow-credentials: true
-      max-age: 3600
 
   thymeleaf:
     check-template-location: false
@@ -89,4 +87,3 @@ springdoc:
     try-it-out-enabled: true
     operations-sorter: method
     tags-sorter: alpha
-
