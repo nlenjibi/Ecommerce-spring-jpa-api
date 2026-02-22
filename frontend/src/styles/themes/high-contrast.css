@@ -1,0 +1,35 @@
+/* ==================== HIGH CONTRAST THEME ==================== */
+[data-theme='high-contrast'] {
+  /* High contrast colors */
+  --color-background: 255 255 255;
+  --color-foreground: 0 0 0;
+  --color-border: 0 0 0;
+  --color-primary-500: 0 0 0;
+
+  /* Enhanced contrast ratios */
+  .card {
+    border-width: 2px;
+  }
+
+  .btn {
+    border-width: 2px;
+  }
+
+  .form-input {
+    border-width: 2px;
+  }
+
+  /* Remove subtle effects for better clarity */
+  .card {
+    box-shadow: none;
+  }
+
+  .btn {
+    box-shadow: none;
+  }
+
+  /* Increase font weights */
+  body {
+    font-weight: 500;
+  }
+}

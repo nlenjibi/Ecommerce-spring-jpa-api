@@ -1,0 +1,44 @@
+/* ==================== THEME MANAGER ==================== */
+/* Import all themes */
+@import './light.css';
+@import './dark.css';
+@import './high-contrast.css';
+
+/* Theme transition animation */
+[data-theme] {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Theme system variables */
+:root {
+  /* Ensure smooth transitions */
+  --transition-theme: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* High contrast mode detection */
+@media (prefers-contrast: high) {
+  :root:not([data-theme]) {
+    /* Auto-apply high contrast if user prefers it */
+    @apply contrast-200;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme] {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  [data-theme] {
+    /* Force light theme for printing */
+    --color-background: 255 255 255;
+    --color-foreground: 0 0 0;
+    --color-border: 0 0 0;
+  }
+}

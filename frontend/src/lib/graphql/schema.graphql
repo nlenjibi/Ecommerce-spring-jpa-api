@@ -1,0 +1,438 @@
+# GraphQL Schema for E-commerce Application
+# This schema is now aligned with the backend API
+
+scalar DateTime
+scalar BigDecimal
+scalar Long
+scalar Upload
+scalar JSON
+
+# =====================
+# PRODUCT TYPES
+# =====================
+type Product {
+  id: ID!
+  name: String!
+  description: String
+  slug: String!
+  sku: String
+  price: BigDecimal!
+  discountPrice: BigDecimal
+  costPrice: BigDecimal
+  effectivePrice: BigDecimal
+  discountPercentage: BigDecimal
+  stockQuantity: Int!
+  reservedQuantity: Int!
+  availableQuantity: Int!
+  lowStockThreshold: Int!
+  reorderPoint: Int
+  reorderQuantity: Int
+  maxStockQuantity: Int
+  inventoryStatus: InventoryStatus!
+  trackInventory: Boolean!
+  allowBackorder: Boolean!
+  expectedRestockDate: DateTime
+  lastRestockedAt: DateTime
+  featured: Boolean!
+  isNew: Boolean!
+  isBestseller: Boolean!
+  viewCount: Long!
+  salesCount: Long!
+  ratingAverage: BigDecimal
+  ratingCount: Int!
+  imageUrl: String
+  thumbnailUrl: String
+  additionalImages: [String!]
+  metaTitle: String
+  metaDescription: String
+  tags: [String!]
+  category: Category!
+  images: [ProductImage!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Long!
+}
+
+type ProductImage {
+  id: ID!
+  imageUrl: String!
+  altText: String
+  isPrimary: Boolean!
+}
+
+type ProductVariant {
+  id: ID!
+  name: String!
+  sku: String!
+  price: BigDecimal!
+  inventory: Int!
+  attributes: JSON!
+}
+
+type ProductInventory {
+  id: ID!
+  quantity: Int!
+  reserved: Int!
+  available: Int!
+  lowStockThreshold: Int!
+}
+
+# =====================
+# CATEGORY TYPES
+# =====================
+type Category {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  imageUrl: String
+  displayOrder: Int
+  isActive: Boolean
+  featured: Boolean
+  icon: String
+  color: String
+  productCount: Int
+  parentId: ID
+  children: [Category!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type CategoryResponseDto {
+  content: [Category!]!
+  pageInfo: PageInfo!
+}
+
+# =====================
+# CART TYPES
+# =====================
+enum CartStatus {
+  ACTIVE
+  ABANDONED
+  CONVERTED
+}
+
+type Cart {
+  id: ID!
+  status: CartStatus!
+  items: [CartItem!]!
+  totalPrice: BigDecimal!
+  finalPrice: BigDecimal!
+  itemCount: Int!
+  dateCreated: DateTime!
+  updatedAt: DateTime!
+}
+
+type CartItem {
+  id: ID!
+  product: Product!
+  quantity: Int!
+  unitPrice: BigDecimal!
+  totalPrice: BigDecimal!
+}
+
+# =====================
+# ORDER TYPES
+# =====================
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  REFUNDED
+  FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  COMPLETED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+type OrderItem {
+  id: ID!
+  productId: ID!
+  productName: String!
+  quantity: Int!
+  unitPrice: BigDecimal!
+  discount: BigDecimal!
+  totalPrice: BigDecimal!
+  productImageUrl: String
+}
+
+type Order {
+  id: ID!
+  orderNumber: String!
+  status: OrderStatus!
+  orderDate: DateTime!
+  subtotal: BigDecimal!
+  taxAmount: BigDecimal
+  shippingCost: BigDecimal
+  discountAmount: BigDecimal
+  couponDiscount: BigDecimal
+  totalAmount: BigDecimal!
+  couponCode: String
+  paymentStatus: PaymentStatus!
+  paymentMethod: String
+  paidAt: DateTime
+  shippingAddress: String
+  trackingNumber: String
+  carrier: String
+  shippedAt: DateTime
+  estimatedDeliveryDate: DateTime
+  deliveredAt: DateTime
+  cancelledAt: DateTime
+  cancellationReason: String
+  refundedAt: DateTime
+  refundAmount: BigDecimal
+  refundReason: String
+  customerNotes: String
+  items: [OrderItem!]!
+  customerEmail: String
+  customerName: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# =====================
+# ORDER RESPONSE TYPES
+# =====================
+type OrderResponseDto {
+  content: [Order!]!
+  pageInfo: PageInfo!
+}
+
+type OrderStats {
+  totalOrders: Int!
+  pendingOrders: Int!
+  processingOrders: Int!
+  shippedOrders: Int!
+  deliveredOrders: Int!
+  cancelledOrders: Int!
+  totalRevenue: BigDecimal!
+  monthlyRevenue: BigDecimal!
+  averageOrderValue: BigDecimal!
+}
+
+type OrderStatsResponse {
+  stats: OrderStats!
+  errors: [String!]
+}
+
+# =====================
+# ADDRESS TYPE
+# =====================
+type Address {
+  id: ID!
+  street: String!
+  city: String!
+  state: String!
+  postalCode: String!
+  country: String!
+}
+
+# =====================
+# PAGINATION
+# =====================
+type PageInfo {
+  page: Int!
+  size: Int!
+  totalElements: Int!
+  totalPages: Int!
+  isFirst: Boolean!
+  isLast: Boolean!
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+}
+
+# =====================
+# INPUTS
+# =====================
+input ProductFilterInput {
+  categoryId: ID
+  categoryIds: [ID!]
+  categoryName: String
+  categorySlug: String
+  minPrice: BigDecimal
+  maxPrice: BigDecimal
+  keyword: String
+  name: String
+  sku: String
+  slug: String
+  featured: Boolean
+  isNew: Boolean
+  isBestseller: Boolean
+  inventoryStatus: InventoryStatus
+  inventoryStatuses: [InventoryStatus!]
+  inStockOnly: Boolean
+  lowStockOnly: Boolean
+  outOfStockOnly: Boolean
+  needsReorderOnly: Boolean
+  minStock: Int
+  maxStock: Int
+  minAvailableQuantity: Int
+  hasDiscount: Boolean
+  minDiscountPercent: Int
+  maxDiscountPercent: Int
+  minRating: BigDecimal
+  maxRating: BigDecimal
+  tags: [String!]
+  createdAfter: DateTime
+  createdBefore: DateTime
+  minViews: Long
+  maxViews: Long
+  minSales: Long
+  popular: Boolean
+  trending: Boolean
+  includeCategory: Boolean = true
+  includeImages: Boolean = false
+}
+
+input ProductCreateRequest {
+  name: String!
+  description: String
+  slug: String!
+  sku: String
+  price: BigDecimal!
+  discountPrice: BigDecimal
+  costPrice: BigDecimal
+  categoryId: ID!
+  stockQuantity: Int = 0
+  lowStockThreshold: Int = 10
+  reorderPoint: Int = 5
+  reorderQuantity: Int
+  maxStockQuantity: Int
+  trackInventory: Boolean = true
+  allowBackorder: Boolean = false
+  featured: Boolean = false
+  isNew: Boolean = false
+  isBestseller: Boolean = false
+  imageUrl: String
+  thumbnailUrl: String
+  additionalImages: [String!]
+  metaTitle: String
+  metaDescription: String
+  tags: [String!]
+}
+
+input ProductUpdateRequest {
+  name: String
+  description: String
+  slug: String
+  sku: String
+  price: BigDecimal
+  discountPrice: BigDecimal
+  costPrice: BigDecimal
+  categoryId: ID
+  stockQuantity: Int
+  lowStockThreshold: Int
+  reorderPoint: Int
+  reorderQuantity: Int
+  maxStockQuantity: Int
+  trackInventory: Boolean
+  allowBackorder: Boolean
+  featured: Boolean
+  isNew: Boolean
+  isBestseller: Boolean
+  imageUrl: String
+  thumbnailUrl: String
+  additionalImages: [String!]
+  metaTitle: String
+  metaDescription: String
+  tags: [String!]
+}
+
+input AddItemToCartInput {
+  productId: ID!
+  quantity: Int!
+}
+
+input UpdateCartItemInput {
+  quantity: Int!
+}
+
+# =====================
+# ENUMS
+# =====================
+enum InventoryStatus {
+  IN_STOCK
+  LOW_STOCK
+  OUT_OF_STOCK
+  DISCONTINUED
+  PRE_ORDER
+  BACKORDER
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+# =====================
+# QUERIES & MUTATIONS
+# =====================
+type Query {
+  products(pagination: PageInput, filter: ProductFilterInput): ProductDto
+  product(id: ID!): Product
+  categories(pagination: PageInput): CategoryResponseDto!
+  category(id: ID!): Category
+  cart(id: ID!): Cart
+  
+  # Order queries - Customer
+  order(id: ID!): Order
+  orderByNumber(orderNumber: String!): Order
+  myOrders(pagination: PageInput): OrderResponseDto!
+  
+  # Order queries - Admin
+  allOrders(pagination: PageInput): OrderResponseDto!
+  orderStatistics: OrderStatsResponse!
+}
+
+type Mutation {
+  createProduct(input: ProductCreateRequest!): Product!
+  updateProduct(id: ID!, input: ProductUpdateRequest!): Product!
+  deleteProduct(id: ID!): Boolean!
+  createCart: Cart!
+  addItemToCart(cartId: ID!, input: AddItemToCartInput!): CartItem!
+  updateCartItem(
+    cartId: ID!
+    productId: ID!
+    input: UpdateCartItemInput!
+  ): CartItem!
+  removeCartItem(cartId: ID!, productId: ID!): Boolean!
+  clearCart(cartId: ID!): Boolean!
+  mergeCart(guestCartId: ID!): Cart!
+  createOrder(input: OrderCreateInput!): Order!
+}
+
+input PageInput {
+  page: Int = 0
+  size: Int = 20
+  sortBy: String = "id"
+  direction: SortDirection = ASC
+}
+
+input OrderCreateInput {
+  items: [OrderItemInput!]!
+  shippingCost: BigDecimal
+  paymentMethod: String
+  shippingAddress: String
+  customerNotes: String
+  couponCode: String
+}
+
+input OrderItemInput {
+  productId: ID!
+  quantity: Int!
+}
+
+type ProductDto {
+  content: [Product!]!
+  pageInfo: PageInfo!
+}
