@@ -132,7 +132,7 @@ This Smart E-Commerce System is a comprehensive web-based Spring Boot applicatio
 | Hibernate | 6.x | ORM framework |
 | Database | H2/PostgreSQL | Persistent storage |
 | Maven | 3.9+ | Build tool |
-| Docker | Latest | Containerization |
+
 
 ## Architecture
 
@@ -149,21 +149,7 @@ This Smart E-Commerce System is a comprehensive web-based Spring Boot applicatio
 └─────────────────┘
 ```
 
-### Modular Architecture
-```
-modules/
-├── auth/
-├── user/
-├── product/
-├── category/
-├── cart/
-├── order/
-├── payment/
-├── inventory/
-├── recommendation/
-├── notification/
-└── analytics/
-```
+
 
 ### Design Patterns
 - **Dependency Injection**: Constructor-based injection for better testability
