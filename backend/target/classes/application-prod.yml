@@ -22,7 +22,10 @@ spring:
   graphql:
     graphiql:
       enabled: false  # Disable in production
+    path: /graphql
     schema:
+      locations: classpath:graphql/**/*.graphqls
+      file-extensions: .graphqls
       introspection:
         enabled: false  # Disable introspection
     cors:

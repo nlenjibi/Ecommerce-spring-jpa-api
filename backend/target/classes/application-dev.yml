@@ -35,8 +35,8 @@ spring:
 
     # Schema location - THIS IS CRITICAL
     schema:
-      locations: classpath:graphql/**/*.graphql
-      file-extensions: .graphql
+      locations: classpath:graphql/**/*.graphqls
+      file-extensions: .graphqls
       printer:
         enabled: true
 
